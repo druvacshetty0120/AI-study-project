@@ -1,0 +1,19 @@
+from flask import Flask, render_template, request, jsonify 
+app = Flask(__name__) 
+answers = {    "python": "Python is a programming language used for web development, AI, and data science.",    "java": "Java is an object-oriented programming language.",    "ai": "Artificial Intelligence enables computers to perform intelligent tasks.",    "machine learning": "Machine Learning allows computers to learn from data.",    "database": "A database is an organized collection of data."
+}
+@app.route("/")
+def home():
+return render_template("index.html")
+@app.route("/ask", methods=["POST"]) 
+def ask_question():  
+data = request.get_json()  
+question = data.get("question", "").lower()  
+response = "Sorry, I don't have an answer for that question yet."  
+for keyword, answer in answers.items():    
+if keyword in question:      
+response = answer            
+break 
+return jsonify({"answer": response})
+if __name__ == "__main__":   
+app.run(debug=True)
